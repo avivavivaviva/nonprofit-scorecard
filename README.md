@@ -3,6 +3,7 @@
 Static, self-contained prototype. `index.html` bundles React, ReactDOM, and the
 compiled component inline — no build step, nothing fetched at runtime.
 
+
 ---
 
 ## First-time setup (GitHub → Vercel, ~5 min, do once)

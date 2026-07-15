@@ -307,8 +307,7 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
 const {
   useState,
   useEffect,
-  useRef,
-  useMemo
+  useRef
 } = React;
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -326,16 +325,6 @@ const LIGHTEST_PURPLE = "#f2f2fd";
 const LIGHTEST_BLUE = "#d7e8f8";
 const INK = "#1f1628"; // Darkest Purple for body ink
 const PAPER = "#f2f2fd"; // Lightest Purple as page bg
-
-// Fisher–Yates, returns a new shuffled array
-function shuffle(arr) {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 // ── Diagnostic questions (scored spine). `multi:true` on Q3. ──────────────
 const DIAGNOSTIC = [{
@@ -663,20 +652,9 @@ function Scorecard() {
   });
   const topRef = useRef(null);
 
-  // Shuffle answer options once per session (stable across re-renders).
-  const shuffledDiag = useMemo(() => DIAGNOSTIC.map(d => ({
-    ...d,
-    options: shuffle(d.options)
-  })), []);
-  const shuffledSit = useMemo(() => SITUATION.map(s => {
-    // keep "other"/"Something else" last if present; shuffle the rest
-    const fixedLast = s.options.filter(o => o.key === "other");
-    const rest = s.options.filter(o => o.key !== "other");
-    return {
-      ...s,
-      options: [...shuffle(rest), ...fixedLast]
-    };
-  }), []);
+  // Options are shown in authored order (a deliberate 1->4 maturity ladder).
+  const shuffledDiag = DIAGNOSTIC;
+  const shuffledSit = SITUATION;
   useEffect(() => {
     if (topRef.current) topRef.current.scrollTop = 0;
   }, [stage, dIdx, sIdx]);

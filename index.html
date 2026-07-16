@@ -548,7 +548,8 @@ function buildPlan({
   campaign,
   audience,
   decision,
-  channels
+  channels,
+  campaignOther
 }) {
   const loopless = (channels || []).filter(c => SITUATION[3].options.find(o => o.key === c)?.loop === false);
   const hasLooplessChannel = loopless.length > 0;
@@ -561,7 +562,7 @@ function buildPlan({
     skeptics: "persuadable skeptics who don't prioritize you yet",
     broad: "the persuadable general public"
   }[audience] || "your target audience";
-  const campaignLabel = {
+  const campaignLabel = campaign === "other" && (campaignOther || "").trim() ? campaignOther.trim() : {
     yearend: "year-end appeal",
     acquisition: "new-donor acquisition push",
     majormoment: "moment-driven campaign",
@@ -878,6 +879,7 @@ function Scorecard() {
       ...prev,
       [s.id]: key
     }));
+    if (key === "other") return; // reveal the "other" text box; advance via Continue
     setTimeout(() => {
       if (sIdx < totalSit - 1) setSIdx(sIdx + 1);else setStage("gate");
     }, 180);
@@ -891,6 +893,9 @@ function Scorecard() {
   const sCur = shuffledSit[sIdx];
   const sSelected = situation[sCur?.id];
   const sMultiReady = sCur?.multi && (sSelected?.length || 0) > 0;
+  const sOtherSingle = sCur && !sCur.multi && sSelected === "other";
+  const sShowContinue = !!sCur?.multi || sOtherSingle;
+  const sContinueReady = sCur?.multi ? sMultiReady : true;
   return /*#__PURE__*/React.createElement("div", {
     className: "wrap",
     ref: topRef
@@ -1025,6 +1030,25 @@ function Scorecard() {
     }, /*#__PURE__*/React.createElement("span", {
       className: `opt-key ${sCur.multi ? "checkbox" : ""}`
     }, sCur.multi ? sel ? "✓" : "" : i + 1), /*#__PURE__*/React.createElement("span", null, o.label));
+  })), !sCur.multi && sSelected === "other" && /*#__PURE__*/React.createElement("div", {
+    className: "field other-field"
+  }, /*#__PURE__*/React.createElement("label", null, "Tell us more"), /*#__PURE__*/React.createElement("input", {
+    autoFocus: true,
+    placeholder: "Tell us what it is",
+    value: situation.campaignOther || "",
+    onChange: e => setSituation(prev => ({
+      ...prev,
+      campaignOther: e.target.value
+    }))
+  })), sCur.multi && (sSelected || []).includes("other") && /*#__PURE__*/React.createElement("div", {
+    className: "field other-field"
+  }, /*#__PURE__*/React.createElement("label", null, "Tell us more"), /*#__PURE__*/React.createElement("input", {
+    placeholder: "Which other channel?",
+    value: situation.channelsOther || "",
+    onChange: e => setSituation(prev => ({
+      ...prev,
+      channelsOther: e.target.value
+    }))
   })), /*#__PURE__*/React.createElement("div", {
     className: "row-actions"
   }, /*#__PURE__*/React.createElement("button", {
@@ -1032,9 +1056,9 @@ function Scorecard() {
     onClick: () => {
       if (sIdx > 0) setSIdx(sIdx - 1);else setStage("diagnostic");
     }
-  }, "\u2190 Back"), sCur.multi && /*#__PURE__*/React.createElement("button", {
-    className: `next ${sMultiReady ? "" : "next-off"}`,
-    disabled: !sMultiReady,
+  }, "\u2190 Back"), sShowContinue && /*#__PURE__*/React.createElement("button", {
+    className: `next ${sContinueReady ? "" : "next-off"}`,
+    disabled: !sContinueReady,
     onClick: advanceMulti
   }, "Continue \u2192"))), stage === "gate" && /*#__PURE__*/React.createElement("section", {
     className: "panel gate"
@@ -1244,6 +1268,7 @@ h1 { font-size: 38px; line-height: 1.06; font-weight: 800; letter-spacing:-.02em
 .qq { font-size: 25px; line-height:1.2; font-weight:800; letter-spacing:-.01em; margin:0 0 8px;}
 .qsub { font-size:14.5px; color:#7d7393; margin:0 0 22px;}
 .opts { display:flex; flex-direction:column; gap:10px; }
+.other-field { margin-top:14px; }
 .opt { display:flex; align-items:center; gap:14px; text-align:left; background:#fff; border:1.5px solid #e2dcf5; border-radius:13px; padding:15px 16px; font-size:15.5px; color:var(--ink); cursor:pointer; transition: border-color .1s, background .1s, transform .06s; line-height:1.35; }
 .opt:hover { border-color: var(--purple); background:#faf8ff; }
 .opt-on { border-color: var(--purple); background:#f1ecff; }

@@ -1167,9 +1167,11 @@ function Scorecard() {
     className: "plan-foot"
   }, "This is a starting sketch, not a quote. A 20-minute call turns it into a scoped plan with timeline and pricing for your actual campaign.")), /*#__PURE__*/React.createElement("div", {
     className: "cta-row"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("a", {
     className: "cta",
-    onClick: () => alert("→ booking flow")
+    href: "https://calendly.com/nathan-growprogress/30min?back=1&month=2026-07",
+    target: "_blank",
+    rel: "noopener noreferrer"
   }, "Book a 20-min plan walkthrough \u2192"), /*#__PURE__*/React.createElement("button", {
     className: "ghost",
     onClick: () => {
@@ -1240,7 +1242,7 @@ h1 { font-size: 38px; line-height: 1.06; font-weight: 800; letter-spacing:-.02em
 .fact { background:#fff; border:1px solid #e2dcf5; border-radius:12px; padding:14px 16px; min-width:120px;}
 .fact b { display:block; font-size:20px; color:var(--purple); }
 .fact span { font-size:12.5px; color:#8a809f; }
-.cta { background: var(--purple); color:#fff; border:none; border-radius: 999px; font-size: 16px; font-weight: 700; padding: 15px 26px; cursor:pointer; box-shadow: 0 6px 18px rgba(67,44,151,.22); transition: transform .08s, box-shadow .12s; }
+.cta { background: var(--purple); color:#fff; border:none; border-radius: 999px; font-size: 16px; font-weight: 700; padding: 15px 26px; cursor:pointer; box-shadow: 0 6px 18px rgba(67,44,151,.22); transition: transform .08s, box-shadow .12s; display:inline-block; text-decoration:none; }
 .cta:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(67,44,151,.3); }
 .nocard { font-size: 12.5px; color:#9690a8; margin-top:16px; max-width:54ch;}
 .gate-err { font-size: 13px; color:#b4232a; margin-top:12px; font-weight:600; }

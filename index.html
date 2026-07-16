@@ -650,6 +650,11 @@ function Scorecard() {
     org: "",
     role: ""
   });
+  const [triedReveal, setTriedReveal] = useState(false);
+  // Gate is required before the reveal: first name, last name + a valid-looking work email.
+  const gateNameOk = (lead.firstName || "").trim().length > 0 && (lead.lastName || "").trim().length > 0;
+  const gateEmailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((lead.email || "").trim());
+  const gateReady = gateNameOk && gateEmailOk;
   const topRef = useRef(null);
 
   // Options are shown in authored order (a deliberate 1->4 maturity ladder).
@@ -1042,21 +1047,21 @@ function Scorecard() {
   }, "Your score, how you rank against the sector, and a one-page testing plan for your next campaign."), /*#__PURE__*/React.createElement("div", {
     className: "form"
   }, /*#__PURE__*/React.createElement(Field, {
-    label: "First name",
+    label: "First name *",
     value: lead.firstName,
     onChange: v => setLead({
       ...lead,
       firstName: v
     })
   }), /*#__PURE__*/React.createElement(Field, {
-    label: "Last name",
+    label: "Last name *",
     value: lead.lastName,
     onChange: v => setLead({
       ...lead,
       lastName: v
     })
   }), /*#__PURE__*/React.createElement(Field, {
-    label: "Work email",
+    label: "Work email *",
     value: lead.email,
     onChange: v => setLead({
       ...lead,
@@ -1082,10 +1087,15 @@ function Scorecard() {
   }, "Select\u2026"), /*#__PURE__*/React.createElement("option", null, "Development / fundraising"), /*#__PURE__*/React.createElement("option", null, "Communications / marketing"), /*#__PURE__*/React.createElement("option", null, "Executive director / CEO"), /*#__PURE__*/React.createElement("option", null, "Digital / data"), /*#__PURE__*/React.createElement("option", null, "Other")))), /*#__PURE__*/React.createElement("button", {
     className: "cta",
     onClick: () => {
-      if ((lead.email || "").trim()) postToHubSpot(gateProperties()); // capture on submit
+      setTriedReveal(true);
+      if (!gateReady) return; // require first name + valid email before revealing
+      postToHubSpot(gateProperties()); // capture on submit
       setStage("result");
     }
-  }, "Reveal my score \u2192"), /*#__PURE__*/React.createElement("div", {
+  }, "Reveal my score \u2192"), triedReveal && !gateReady && /*#__PURE__*/React.createElement("div", {
+    className: "gate-err",
+    role: "alert"
+  }, gateNameOk ? "Please enter a valid work email to see your results." : "Please add your first and last name and a valid work email to see your results."), /*#__PURE__*/React.createElement("div", {
     className: "nocard"
   }, "We'll only use this to send your results and occasional insights. Unsubscribe anytime.")), stage === "result" && /*#__PURE__*/React.createElement("section", {
     className: "panel result"
@@ -1233,6 +1243,7 @@ h1 { font-size: 38px; line-height: 1.06; font-weight: 800; letter-spacing:-.02em
 .cta { background: var(--purple); color:#fff; border:none; border-radius: 999px; font-size: 16px; font-weight: 700; padding: 15px 26px; cursor:pointer; box-shadow: 0 6px 18px rgba(67,44,151,.22); transition: transform .08s, box-shadow .12s; }
 .cta:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(67,44,151,.3); }
 .nocard { font-size: 12.5px; color:#9690a8; margin-top:16px; max-width:54ch;}
+.gate-err { font-size: 13px; color:#b4232a; margin-top:12px; font-weight:600; }
 .progress { margin-bottom: 26px; }
 .progress-label { font-size:12px; font-weight:700; letter-spacing:.1em; color:#9087ad; text-transform:uppercase; margin-bottom:8px;}
 .progress-track { height:5px; background:#e2dcf5; border-radius:99px; overflow:hidden;}

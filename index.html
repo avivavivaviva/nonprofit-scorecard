@@ -557,7 +557,9 @@ function buildPlan({
   const loopless = (channels || []).filter(c => SITUATION[3].options.find(o => o.key === c)?.loop === false);
   const hasLooplessChannel = loopless.length > 0;
   const looplessNames = loopless.map(c => SITUATION[3].options.find(o => o.key === c)?.label).join(", ");
-  const needsAU = ["younger", "skeptics", "broad", "lapsed"].includes(audience);
+  // Lapsed donors live on the org's file and can be tested directly, so we don't
+  // pitch audience-understanding research for them — AU is for net-new acquisition.
+  const needsAU = ["younger", "skeptics", "broad"].includes(audience);
   const audienceLabel = {
     base: "your loyal base",
     lapsed: "lapsed donors",
@@ -606,7 +608,7 @@ function buildPlan({
     steps.push({
       tag: needsAU ? "Step 3" : "Step 2",
       product: "Pre-launch validation for blind channels",
-      why: `You're running ${looplessNames}, which return no clean feedback loop — no clicks to optimize against once it's live. Pre-validated creative matters most exactly here, and a test is often cheaper than the minimum media spend you'd need for any directional signal.`
+      why: `You're running ${looplessNames}, which return no clean feedback loop — no clicks to optimize against once it's live. This is exactly where testing your creative before launch matters most, and a test is often cheaper than the minimum media spend you'd need for any directional signal.`
     });
   } else if (campaign === "planned" || campaign === "brand") {
     steps.push({
@@ -1111,7 +1113,7 @@ function Scorecard() {
     value: PEER_MEDIAN / 5 * 20
   }), /*#__PURE__*/React.createElement("b", null, PEER_MEDIAN.toFixed(1)))), /*#__PURE__*/React.createElement("div", {
     className: "percentile"
-  }, "Ahead of ", /*#__PURE__*/React.createElement("b", null, percentile, "%"), " of cause-driven teams who've taken this."))), /*#__PURE__*/React.createElement("div", {
+  }, "Ahead of ", /*#__PURE__*/React.createElement("b", null, percentile, "%"), " of cause-driven teams who've taken this benchmarking test."))),/*#__PURE__*/React.createElement("div", {
     className: "dims"
   }, DIAGNOSTIC.map(d => /*#__PURE__*/React.createElement("div", {
     key: d.id,

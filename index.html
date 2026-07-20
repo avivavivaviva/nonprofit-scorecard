@@ -686,6 +686,8 @@ function Scorecard() {
     }
   });
   const gap = weakest ? DIM_GAP[weakest] : null;
+  // Display title for the weakest dimension (question phrasing), mapped from its key.
+  const weakestTitle = weakest ? DIAGNOSTIC.find(d => d.dim === weakest)?.title || weakest : "";
   const tier = score5 >= 4 ? {
     name: "Persuasion-led",
     blurb: "You're already operating ahead of most of the sector. Your biggest opportunity now is to increase the depth and cadence of your pre-campaign testing."
@@ -1122,7 +1124,7 @@ function Scorecard() {
     className: "dimrow"
   }, /*#__PURE__*/React.createElement("span", {
     className: "dimname"
-  }, d.dim), /*#__PURE__*/React.createElement(Bar, {
+  }, d.title), /*#__PURE__*/React.createElement(Bar, {
     value: answers[d.id] * 5
   }), /*#__PURE__*/React.createElement("span", {
     className: "dimpts"
@@ -1130,7 +1132,7 @@ function Scorecard() {
     className: "gap"
   }, /*#__PURE__*/React.createElement("div", {
     className: "gap-tag"
-  }, "YOUR BIGGEST GAP \u2014 ", weakest.toUpperCase()), /*#__PURE__*/React.createElement("h3", null, gap.short), /*#__PURE__*/React.createElement("p", null, gap.body)), /*#__PURE__*/React.createElement("div", {
+  }, "YOUR BIGGEST GAP \u2014 ", weakestTitle.toUpperCase()), /*#__PURE__*/React.createElement("h3", null, gap.short), /*#__PURE__*/React.createElement("p", null, gap.body)), /*#__PURE__*/React.createElement("div", {
     className: "plan"
   }, /*#__PURE__*/React.createElement("div", {
     className: "kicker"

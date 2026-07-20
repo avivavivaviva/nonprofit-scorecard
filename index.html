@@ -520,27 +520,27 @@ const SITUATION = [{
 const DIM_GAP = {
   "When you decide": {
     short: "You're learning too late.",
-    body: "Your biggest decisions — your overall messaging frame and your target audience — get locked in before you have real data on what actually persuades people to take action. As a result, you are optimizing a message you've already committed to among audiences you've already reached.",
+    body: "It's common to lock in your messaging and audience early, but doing so without pre-testing data creates a feedback loop limited to existing targets, with your campaign foundations like message and audience locked in before testing begins. This forces you into a cycle of optimizing pre-committed choices for a known base, rather than using data to find what could persuade new potential donors.",
     product: "Rapid Message Test"
   },
   "Who you can reach": {
     short: "You're compounding your existing base.",
-    body: "You're optimizing to your current audience, which means you're likely missing what persuades people not already in your donor list. The younger, more diverse donors who may sustain you in a decade likely don't resemble your current list, so the platforms never surface them.",
+    body: "You're optimizing to your current audience, which means you're likely missing what persuades people not already on your donor list, often the younger, diverse donors essential for future growth.",
     product: "Audience Understanding Survey"
   },
   "What you measure": {
     short: "You're measuring distance, not persuasion.",
-    body: "Reach, opens, and cost-per-donation tell you how far a message traveled but not what was possible with an alternate frame or messenger.",
+    body: "Reach, opens, and cost-per-donation provide valuable data on delivery, but they don't measure potential. They can tell you how far a message traveled, but can't provide insight into whether an alternative frame or messenger would have unlocked even greater support.",
     product: "Rapid Message Test"
   },
   "Why, not just which": {
     short: "You know which won, not why.",
-    body: "Without the “why,” a winning message doesn't scale. Next quarter's campaign starts from instinct again because the causal driver behind last quarter's win was never isolated.",
+    body: "Without the “why,” a winning message doesn't scale. Without understanding the driver behind your success, you're stuck relying on intuition for your next campaign instead of building on what is proven to work.",
     product: "Rapid Message Test"
   },
   "One-off vs. motion": {
     short: "Every campaign starts from a blank page.",
-    body: "When findings live in someone's head or a one-off deck, the learning doesn't compound. The orgs that pull ahead treat each test as the start of the next brief, building a shared evidence base.",
+    body: "When findings live in someone's head or a one-off deck, the learning doesn't compound. The organizations that pull ahead treat each test as the start of the next brief, building a shared evidence base to unlock future support.",
     product: "Persuasion Library + standing tests"
   }
 };
@@ -585,33 +585,33 @@ function buildPlan({
     steps.push({
       tag: "Step 1",
       product: "Audience Understanding Survey",
-      why: `Before testing a single message, map what actually moves ${audienceLabel} — in their words, not yours. ${audience === "younger" || audience === "broad" ? "This is the audience your list and lookalikes can't surface, so this is the non-negotiable first step." : "You can't test the right frames until you know which of these people are genuinely movable and why."}`
+      why: `Before testing a single message, map what actually moves ${audienceLabel} in their own words. You can't test the right frames until you know which part of your target audiences are movable and why.`
     });
   }
   const rmtWhy = {
-    frame: `Test distinct frames head-to-head — story vs. data, urgency vs. hope — for your ${campaignLabel}. The frame is the highest-leverage choice you make, and the one A/B testing can't reach because it only compares options you already picked.`,
-    emotion: `Put an empathy-and-belonging appeal against an evidence-and-outcomes appeal, measured as causal lift. Charity: Water assumed narrative would win; the data-driven cut actually drove more donation intent — and backfired with high earners. You don't want to guess that.`,
-    messenger: `Hold the message constant and vary only the source — peer voice vs. institutional voice vs. beneficiary. When the messenger is contested, a test gives you a defensible answer instead of a meeting argument.`,
-    narrative: `Test competing versions of your organizational story to see which builds the most support with ${audienceLabel} — before you commit it to creative.`,
+    frame: `Test distinct frames head-to-head — story vs. data, urgency vs. hope — for your ${campaignLabel}. Getting the frame right matters, and pre-testing allows for more expansive exploration compared to a standard A/B test.`,
+    emotion: `Put an empathy-and-belonging appeal against an evidence-and-outcomes appeal, measured as causal lift. Charity: Water assumed narrative would win, but the data-driven cut actually drove more donation intent while backfiring with high earners. Testing allows you to surface these different results.`,
+    messenger: `Hold the message constant and vary only the source, i.e. peer voice vs. institutional voice vs. beneficiary. When the choice of messenger is contested, testing gives you a clear, evidence-based answer, so you can stop debating and start executing.`,
+    narrative: `Test competing versions of your organizational story to see which builds the most support with ${audienceLabel} before you commit it to creative.`,
     segments: `Test whether ${audienceLabel} respond to a different frame than your base does. Almost every audience hides two or three groups moved by entirely different things; this finds them with subgroup breakdowns.`,
     newdonors: `Test which frames actually persuade ${audienceLabel} before you spend to acquire them — the audience your current channels can't give you a read on.`
   }[decision] || `Test the messaging you're unsure about as causal lift, before you commit budget.`;
   steps.push({
     tag: needsAU ? "Step 2" : "Step 1",
     product: "Rapid Message Test",
-    why: rmtWhy + " Causal lift vs. a control, results in about 24 hours, before a dollar of media is committed."
+    why: rmtWhy + " Get results in 24 hours with a clear view of what works versus what doesn't so you can launch your campaign with confidence."
   });
   if (hasLooplessChannel) {
     steps.push({
       tag: needsAU ? "Step 3" : "Step 2",
       product: "Pre-launch validation for blind channels",
-      why: `You're running ${looplessNames}, which return no clean feedback loop — no clicks to optimize against once it's live. This is exactly where testing your creative before launch matters most, and a test is often cheaper than the minimum media spend you'd need for any directional signal.`
+      why: `You're running ${looplessNames}, which return no clean feedback loop — no clicks to optimize against once it's live. Pre-validated creative matters most here, and a test is often cheaper than the minimum media spend you'd need for any directional signal.`
     });
   } else if (campaign === "planned" || campaign === "brand") {
     steps.push({
       tag: needsAU ? "Step 3" : "Step 2",
       product: "Pre-launch validation",
-      why: `${campaign === "planned" ? "Planned and legacy giving" : "Brand building"} pays off months later, if the system records it at all — so in-platform optimization can't help you. Testing in advance is often the only way to know what works before you commit.`
+      why: `${campaign === "planned" ? "Planned and legacy giving" : "Brand building"} pays off months later, if the system records it at all, so in-platform optimization can't help you. Testing in advance is often the only way to know what works before you commit.`
     });
   }
   return {
@@ -1131,9 +1131,9 @@ function Scorecard() {
     className: "kicker"
   }, "YOUR PRE-LAUNCH PLAN"), /*#__PURE__*/React.createElement("h3", {
     className: "plan-head"
-  }, "For your ", plan.campaignLabel, ", here's what we'd test before you spend \u2014 and why."), /*#__PURE__*/React.createElement("p", {
+  }, "For your ", plan.campaignLabel, ", here's what we'd test before you spend and why."),/*#__PURE__*/React.createElement("p", {
     className: "plan-context"
-  }, "You're trying to move ", /*#__PURE__*/React.createElement("b", null, plan.audienceLabel), ", and the call you're least sure about is ", /*#__PURE__*/React.createElement("b", null, plan.decisionLabel), ".", plan.hasLooplessChannel && /*#__PURE__*/React.createElement(React.Fragment, null, " You're also running in channels (", plan.looplessNames, ") with no live feedback loop \u2014 which raises the stakes on getting the message right up front.")), /*#__PURE__*/React.createElement("div", {
+  }, "You're trying to move ", /*#__PURE__*/React.createElement("b", null, plan.audienceLabel), ", and the call you're least sure about is ", /*#__PURE__*/React.createElement("b", null, plan.decisionLabel), ".", plan.hasLooplessChannel && /*#__PURE__*/React.createElement(React.Fragment, null, " You're also running in channels (", plan.looplessNames, ") with no live feedback loop which raises the stakes on getting the message right up front.")),/*#__PURE__*/React.createElement("div", {
     className: "steps"
   }, plan.steps.map((s, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
@@ -1146,7 +1146,7 @@ function Scorecard() {
     className: "step-product"
   }, s.product), /*#__PURE__*/React.createElement("p", null, s.why))))), /*#__PURE__*/React.createElement("div", {
     className: "plan-foot"
-  }, "This is a starting sketch, not a quote. A 20-minute call turns it into a scoped plan with timeline and pricing for your actual campaign.")), /*#__PURE__*/React.createElement("div", {
+  }, "This is a preliminary guide, but our team is equipped to provide free consultations to build this into a scoped research plan for your organization.")),/*#__PURE__*/React.createElement("div", {
     className: "cta-row"
   }, /*#__PURE__*/React.createElement("a", {
     className: "cta",

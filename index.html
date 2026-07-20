@@ -333,6 +333,7 @@ const PAPER = "#f2f2fd"; // Lightest Purple as page bg
 const DIAGNOSTIC = [{
   id: "timing",
   dim: "When you decide",
+  title: "When do you decide",
   q: "When do you typically know if your fundraising message is working?",
   options: [{
     label: "After the campaign closes, based on dollars raised or response rate",
@@ -350,6 +351,7 @@ const DIAGNOSTIC = [{
 }, {
   id: "reach",
   dim: "Who you can reach",
+  title: "Who can you reach",
   q: "How do you understand what motivates new donor audiences you're trying to reach?",
   options: [{
     label: "We only fundraise to our existing list",
@@ -367,6 +369,7 @@ const DIAGNOSTIC = [{
 }, {
   id: "measure",
   dim: "What you measure",
+  title: "What do you measure",
   q: "Which numbers do you report on after a campaign?",
   sub: "Select all that apply.",
   multi: true,
@@ -386,6 +389,7 @@ const DIAGNOSTIC = [{
 }, {
   id: "why",
   dim: "Why, not just which",
+  title: "Why do campaigns succeed",
   q: "When a message wins, do you know why it won?",
   options: [{
     label: "Not really — we keep track of what generated the most donations and move on",
@@ -403,6 +407,7 @@ const DIAGNOSTIC = [{
 }, {
   id: "motion",
   dim: "One-off vs. motion",
+  title: "How does learning build",
   q: "What happens to the lessons you learn from past campaigns?",
   options: [{
     label: "Each campaign starts more or less from a blank page",
@@ -941,7 +946,7 @@ function Scorecard() {
     pct: dIdx / (totalDiag + totalSit) * 100
   }), /*#__PURE__*/React.createElement("div", {
     className: "dim-tag"
-  }, dCur.dim), /*#__PURE__*/React.createElement("h2", {
+  }, dCur.title), /*#__PURE__*/React.createElement("h2", {
     className: "qq"
   }, dCur.q), dCur.sub && /*#__PURE__*/React.createElement("p", {
     className: "qsub"

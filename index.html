@@ -670,6 +670,9 @@ function Scorecard() {
   const shuffledSit = SITUATION;
   useEffect(() => {
     if (topRef.current) topRef.current.scrollTop = 0;
+    // On mobile the window scrolls (not the inner container), so reset it too —
+    // otherwise the results screen opens mid-page after the gate submit.
+    if (typeof window !== "undefined" && window.scrollTo) window.scrollTo(0, 0);
   }, [stage, dIdx, sIdx]);
   const totalDiag = shuffledDiag.length;
   const totalSit = shuffledSit.length;
@@ -1174,11 +1177,26 @@ function Scorecard() {
     href: "https://calendly.com/nathan-growprogress/30min?back=1&month=2026-07",
     target: "_blank",
     rel: "noopener noreferrer"
-  }, "Book a 30-min plan walkthrough \u2192")),/*#__PURE__*/React.createElement("div", {
+  }, "Book a 30-min plan walkthrough \u2192"), /*#__PURE__*/React.createElement("button", {
+    className: "ghost",
+    onClick: () => {
+      if (typeof window !== "undefined" && window.print) window.print();
+    }
+  }, "Download PDF")),/*#__PURE__*/React.createElement("div", {
     className: "proto-note"
   }, "Prototype \xB7 scoring + plan logic are live and react to your picks \xB7 copy is placeholder-grade")), /*#__PURE__*/React.createElement("footer", {
     className: "foot"
-  }, "Grow Progress \xB7 growprogress.ai"));
+  }, /*#__PURE__*/React.createElement("div", null, "Grow Progress \xB7 growprogress.ai"), /*#__PURE__*/React.createElement("div", {
+    className: "foot-links"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "https://growprogress.ai/about/contact/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Contact us"), " \xB7 ", /*#__PURE__*/React.createElement("a", {
+    href: "https://growprogress.ai/terms-of-use/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Terms of use"))));
 }
 function Progress({
   label,
@@ -1301,12 +1319,20 @@ h1 { font-size: 38px; line-height: 1.06; font-weight: 800; letter-spacing:-.02em
 .ghost { background:none; border:1.5px solid #d8d2e8; color:#6b6285; border-radius:99px; padding:14px 22px; font-weight:700; cursor:pointer; font-size:15px;}
 .proto-note { font-size:11.5px; color:#b3aac6; margin-top:18px; font-style:italic;}
 .foot { text-align:center; font-size:12px; color:#b3aac6; padding-top:24px; letter-spacing:.04em;}
+.foot-links { margin-top:6px; }
+.foot a { color:#9087ad; text-decoration:underline; }
 @media (max-width: 620px) {
   h1 { font-size: 30px; }
   .score-card { grid-template-columns: 1fr; }
   .form { grid-template-columns: 1fr; }
   .dimrow { grid-template-columns: 110px 1fr 30px; }
   .step { grid-template-columns: 54px 1fr; }
+}
+@media print {
+  .eyebrow, .cta-row, .proto-note, .nocard { display:none !important; }
+  .wrap { max-width:none; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .score-card, .bar-fill, .step-tag, .dim-tag, .gap { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin: 1.4cm; }
 }
 `;
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(Scorecard));</script>

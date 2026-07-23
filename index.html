@@ -838,12 +838,26 @@ function Scorecard() {
     return `${head}\n${steps}`;
   }
 
-  // Fire enrichment once, when the result screen first renders.
+  // Fire enrichment once, when the result screen first renders. Wait for the
+  // gate call to finish first so the two upserts don't race (and clobber each
+  // other) in HubSpot, and send the full payload (identity + situational +
+  // scored) so this final write is complete on its own.
   const resultSentRef = useRef(false);
+  const gateSendRef = useRef(null);
   useEffect(() => {
     if (stage === "result" && !resultSentRef.current) {
       resultSentRef.current = true;
-      if ((lead.email || "").trim()) postToHubSpot(resultProperties());
+      if ((lead.email || "").trim()) {
+        (async () => {
+          try {
+            await gateSendRef.current;
+          } catch (e) {}
+          postToHubSpot({
+            ...gateProperties(),
+            ...resultProperties()
+          });
+        })();
+      }
     }
   }, [stage]);
   function answerDiagnosticSingle(pts) {
@@ -1079,7 +1093,7 @@ function Scorecard() {
     onClick: () => {
       setTriedReveal(true);
       if (!gateReady) return; // require first name + valid email before revealing
-      postToHubSpot(gateProperties()); // capture on submit
+      gateSendRef.current = postToHubSpot(gateProperties()); // capture on submit; result call awaits this
       setStage("result");
     }
   }, "Reveal my score \u2192"), triedReveal && !gateReady && /*#__PURE__*/React.createElement("div", {

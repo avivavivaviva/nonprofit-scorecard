@@ -840,6 +840,42 @@ function Scorecard() {
     const steps = pl.steps.map(s => `${s.tag} — ${s.product}: ${s.why}`).join("\n");
     return `${head}\n${steps}`;
   }
+  // Print to a single continuous page sized to the content, so the PDF never
+  // splits onto a second page. We size the page width to the on-screen content
+  // width so text wraps identically, then set the height to fit everything.
+  function downloadResultsPdf() {
+    if (typeof window === "undefined" || !window.print) return;
+    const wrap = topRef.current || document.querySelector(".wrap");
+    if (!wrap) {
+      window.print();
+      return;
+    }
+    // Hide the elements the print stylesheet drops, so the measurement matches.
+    const hidden = [];
+    [".eyebrow", ".cta-row", ".proto-note", ".nocard"].forEach(sel => document.querySelectorAll(sel).forEach(el => {
+      hidden.push([el, el.style.display]);
+      el.style.display = "none";
+    }));
+    const W = wrap.offsetWidth,
+      H = wrap.scrollHeight;
+    hidden.forEach(pair => {
+      pair[0].style.display = pair[1];
+    });
+    const m = 0.43; // inch margin (~1.1cm)
+    const wIn = (W / 96 + 2 * m).toFixed(2);
+    const hIn = (H / 96 + 2 * m + 0.5).toFixed(2); // +0.5in buffer keeps it one page
+    const old = document.getElementById("__pdfpage");
+    if (old) old.remove();
+    const style = document.createElement("style");
+    style.id = "__pdfpage";
+    style.textContent = "@media print{@page{size:" + wIn + "in " + hIn + "in;margin:" + m + "in;}}";
+    document.body.appendChild(style);
+    window.print();
+    setTimeout(() => {
+      const s = document.getElementById("__pdfpage");
+      if (s) s.remove();
+    }, 1000);
+  }
 
   // Fire enrichment once, when the result screen first renders. Wait for the
   // gate call to finish first so the two upserts don't race (and clobber each
@@ -1179,9 +1215,7 @@ function Scorecard() {
     rel: "noopener noreferrer"
   }, "Book a 30-min plan walkthrough \u2192"), /*#__PURE__*/React.createElement("button", {
     className: "ghost",
-    onClick: () => {
-      if (typeof window !== "undefined" && window.print) window.print();
-    }
+    onClick: () => downloadResultsPdf()
   }, "Download PDF")),/*#__PURE__*/React.createElement("div", {
     className: "proto-note"
   }, "Prototype \xB7 scoring + plan logic are live and react to your picks \xB7 copy is placeholder-grade")), /*#__PURE__*/React.createElement("footer", {

@@ -1332,7 +1332,16 @@ h1 { font-size: 38px; line-height: 1.06; font-weight: 800; letter-spacing:-.02em
   .eyebrow, .cta-row, .proto-note, .nocard { display:none !important; }
   .wrap { max-width:none; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .score-card, .bar-fill, .step-tag, .dim-tag, .gap { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin: 1.4cm; }
+  /* Keep each block whole so nothing splits across a page break. */
+  .masthead, .score-card, .dims, .gap, .plan-head, .plan-context, .step, .foot { break-inside: avoid; page-break-inside: avoid; }
+  /* Compact the layout so a typical result fits on one page. */
+  .panel { padding-top: 0; }
+  .score-card { padding: 20px; margin-bottom: 12px; }
+  .dims, .gap, .plan { margin-bottom: 12px; }
+  .steps { gap: 10px; }
+  .foot { padding-top: 14px; }
+  .foot a { color: #432c97; }
+  @page { margin: 1.1cm; }
 }
 `;
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(Scorecard));</script>
